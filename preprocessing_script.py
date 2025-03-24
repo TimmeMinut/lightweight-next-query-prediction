@@ -111,7 +111,7 @@ def preprocess_aol_query_log(input_dir):
                             # Modification: Since some rows have 3 columns of data and others 5,
                             # we remove the columns for ClickURL and ItemRank so that pandas can create a dataframe
                             # from the input data, and since we don't use them anyway.
-                            outfile.write(anon_id + "\t" + query '\n')
+                            outfile.write(anon_id + "\t" + query + '\n')
 
                         prev_anon_id = anon_id
                         prev_query = query
