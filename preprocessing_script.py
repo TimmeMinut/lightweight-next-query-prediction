@@ -4,6 +4,7 @@ import argparse
 import datetime
 import time
 
+
 def preprocess_aol_query_log(input_dir):
 
     start_time = time.time()
@@ -107,7 +108,10 @@ def preprocess_aol_query_log(input_dir):
                             special_char_file.write(line + '\n')
                         else:
                             # Only keep a query if its unique and not only consisting of special characters.
-                            outfile.write(line + '\n')
+                            # Modification: Since some rows have 3 columns of data and others 5,
+                            # we remove the columns for ClickURL and ItemRank so that pandas can create a dataframe
+                            # from the input data, and since we don't use them anyway.
+                            outfile.write(anon_id + "\t" + query '\n')
 
                         prev_anon_id = anon_id
                         prev_query = query
