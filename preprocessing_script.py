@@ -21,6 +21,10 @@ def preprocess_aol_query_log(input_dir):
     total_empty_lines_skipped = 0
     total_files = 0
 
+    # Sets to track userIDs
+    total_userids = set()
+    remaining_userids = set()
+
     # Create output directory and sub-directory for processed files
     output_dir = f"aol_processed_{timestamp}"
     processed_dir = os.path.join(output_dir, "processed_files")
@@ -95,6 +99,8 @@ def preprocess_aol_query_log(input_dir):
                             # Skip malformed anonIDs
                             continue
 
+                        total_userids.add(anon_id)
+
                         is_duplicate = (
                             anon_id == prev_anon_id and query == prev_query)
 
@@ -112,6 +118,7 @@ def preprocess_aol_query_log(input_dir):
                             # we remove the columns for ClickURL and ItemRank so that pandas can create a dataframe
                             # from the input data, and since we don't use them anyway.
                             outfile.write(anon_id + "\t" + query + '\n')
+                            remaining_userids.add(anon_id)
 
                         prev_anon_id = anon_id
                         prev_query = query
@@ -158,6 +165,8 @@ def preprocess_aol_query_log(input_dir):
             f"Removed {total_special_chars_removed:,} special-char queries ({total_special_chars_removed/total_processed_lines*100:.2f}%)",
             f"Remaining non-duplicate, valid ID queries: {total_processed_lines - total_duplicates_removed - total_malformed_ids_removed:,} ({(total_processed_lines - total_duplicates_removed - total_malformed_ids_removed)/total_processed_lines*100:.2f}%)",
             f"Remaining non-duplicate, valid ID, non-special-char queries: {remaining:,} ({remaining/total_processed_lines*100:.2f}%)",
+            f"Removed userIDs: {len(total_userids) - len(remaining_userids)}",
+            f"Remaining UserIDs after processing: {len(remaining_userids)}",
             "="*50,
         ]
 
