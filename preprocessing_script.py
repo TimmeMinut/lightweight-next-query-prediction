@@ -26,7 +26,7 @@ def preprocess_aol_query_log(input_dir):
     remaining_userids = set()
 
     # Create output directory and sub-directory for processed files
-    output_dir = f"aol_processed_{timestamp}"
+    output_dir = f"aol_processed"
     processed_dir = os.path.join(output_dir, "processed_files")
     if not os.path.exists(processed_dir):
         os.makedirs(processed_dir)
