@@ -1,2 +1,2 @@
 # lightweight-next-query-prediction
-Bachelor's Thesis in Computer Science 
+Code for Bachelor's Thesis 
