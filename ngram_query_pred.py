@@ -5,7 +5,6 @@ from create_vocab_query import get_query_vocabulary as get_vocabulary
 def query_level_next_prediction(model_path, eval_file, top_k=5, num_examples=10):
     model = kenlm.Model(model_path)
 
-    # Load query stream
     with open(eval_file, 'r', encoding='utf-8') as f:
         queries = [line.strip() for line in f if line.strip()]
 
@@ -20,7 +19,6 @@ def query_level_next_prediction(model_path, eval_file, top_k=5, num_examples=10)
         context = f"{queries[i]} {queries[i+1]}"  # Trigram context: 2 previous queries
         true_query = queries[i+2]
 
-        # Score all candidate queries
         scores = {
             q: model.score(f"{context} {q}", bos=False, eos=False)
             for q in vocabulary
@@ -29,7 +27,6 @@ def query_level_next_prediction(model_path, eval_file, top_k=5, num_examples=10)
         sorted_preds = sorted(scores.items(), key=lambda x: x[1], reverse=True)
         top_preds = [q for q, _ in sorted_preds[:top_k]]
 
-        # Calculate MRR for this prediction
         if true_query in top_preds:
             rank = top_preds.index(true_query) + 1
             mrr = 1.0 / rank
