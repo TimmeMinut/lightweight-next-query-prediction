@@ -43,14 +43,13 @@ def create_query_vocab(input_dir, vocab_size=None):
                     print(f"⚠️ Error processing line: {line} - {e}")
                     continue
 
-    # === Shuffle and Split ===
-    random.shuffle(all_queries)
+    random.seed(42)
     split_index = int(0.8 * len(all_queries))
     train_data = all_queries[:split_index]
     eval_data = all_queries[split_index:]
 
     with open(TRAIN_FILE_PATH, "w", encoding="utf-8") as train_file:
-        train_file.write("".join(train_data))
+        train_file.write("\n".join(train_data))
     with open(EVAL_FILE_PATH, "w", encoding="utf-8") as eval_file:
         eval_file.write("\n".join(eval_data))
 
