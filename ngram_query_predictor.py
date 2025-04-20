@@ -117,6 +117,8 @@ def query_level_next_prediction(model_path, eval_file, top_k=5, n=3, sample_size
 
     if sample_size is not None and sample_size < len(queries):
         queries = queries[:sample_size]
+        # queries = random.sample(queries, sample_size)
+
 
     print(f" Evaluating {len(queries)} queries with {n}-gram model...")
 
@@ -240,25 +242,34 @@ class ResourceLogger:
 
 def plot_model_performance(results, output_path):
     ngrams = list(results.keys())
-    mrrs = [results[n]['MRR'] for n in ngrams]
-    accs = [results[n]['Accuracy'] for n in ngrams]
+
+    mrrs = [results[n]['MRR'] * 100 for n in ngrams]
+    accs = [results[n]['Accuracy'] * 100 for n in ngrams]
 
     x = np.arange(len(ngrams))
     width = 0.35
 
     plt.figure(figsize=(8, 5))
-    plt.bar(x - width/2, mrrs, width, label='MRR')
-    plt.bar(x + width/2, accs, width, label='Accuracy')
+    bars_mrr = plt.bar(x - width/2, mrrs, width, label='MRR')
+    bars_acc = plt.bar(x + width/2, accs, width, label='Accuracy')
     plt.xticks(x, [f"{n}-gram" for n in ngrams])
-    max_y = max(max(mrrs), max(accs)) + 0.01
+
+    max_y = max(max(mrrs), max(accs)) + 0.2
     plt.ylim(0, max_y)
     plt.title("Model Performance")
     plt.xlabel("N-gram")
-    plt.ylabel("Score")
+    plt.ylabel("Score (%)")
     plt.legend()
+
+    # Add % labels on top of bars
+    for bar in bars_mrr + bars_acc:
+        yval = bar.get_height()
+        plt.text(bar.get_x() + bar.get_width()/2, yval + 0.05, f'{yval:.2f}%', ha='center', va='bottom', fontsize=8)
+
     plt.tight_layout()
     plt.savefig(output_path)
     print(f" Saved performance plot to {output_path}")
+
 
 def plot_resource_utilization_from_json(json_path, output_path):
     with open(json_path, 'r') as f:
