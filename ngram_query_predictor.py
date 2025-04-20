@@ -116,7 +116,7 @@ def query_level_next_prediction(model_path, eval_file, top_k=5, n=3, sample_size
         queries = [line.strip() for line in f if line.strip()]
 
     if sample_size is not None and sample_size < len(queries):
-        queries = random.sample(queries, sample_size)
+        queries = queries[:sample_size]
 
     print(f" Evaluating {len(queries)} queries with {n}-gram model...")
 
