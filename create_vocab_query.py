@@ -20,14 +20,14 @@ def create_query_vocab(input_dir, vocab_size=None):
     query_counts = Counter()
     all_queries = []
 
-    print("🔁 Starting query-level vocabulary creation...")
+    print(" Starting query-level vocabulary creation...")
 
     for filename in os.listdir(input_dir):
         if not filename.endswith(".txt"):
             continue
 
         file_path = os.path.join(input_dir, filename)
-        print(f"📄 Processing: {filename}")
+        print(f" Processing: {filename}")
 
         with open(file_path, 'r', encoding='utf-8') as f:
             for line in f:
@@ -53,8 +53,8 @@ def create_query_vocab(input_dir, vocab_size=None):
     with open(EVAL_FILE_PATH, "w", encoding="utf-8") as eval_file:
         eval_file.write("\n".join(eval_data))
 
-    print(f"✅ Train set saved to: {TRAIN_FILE_PATH}")
-    print(f"✅ Eval set saved to: {EVAL_FILE_PATH}")
+    print(f" Train set saved to: {TRAIN_FILE_PATH}")
+    print(f" Eval set saved to: {EVAL_FILE_PATH}")
 
     # === Build Vocabulary ===
     most_common_queries = query_counts.most_common(vocab_size) if vocab_size else query_counts.items()
@@ -77,8 +77,8 @@ def create_query_vocab(input_dir, vocab_size=None):
     with open(VOCAB_STATS_PATH, 'w', encoding='utf-8') as f:
         json.dump(vocab_stats, f)
 
-    print("✅ Query-level vocabulary saved to:", VOCAB_DICT_PATH)
-    print("📊 Vocabulary Stats:")
+    print(" Query-level vocabulary saved to:", VOCAB_DICT_PATH)
+    print(" Vocabulary Stats:")
     print(json.dumps(vocab_stats, indent=4))
 
     return vocab_dict, vocab_stats
