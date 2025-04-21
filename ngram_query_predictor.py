@@ -62,7 +62,7 @@ def create_query_vocab(input_dir, vocab_size=None):
     eval_data = all_queries[split_index:]
 
     with open(TRAIN_FILE_PATH, "w", encoding="utf-8") as train_file:
-        train_file.write(" ".join(train_data))
+        train_file.write("\n".join(train_data))
     with open(EVAL_FILE_PATH, "w", encoding="utf-8") as eval_file:
         eval_file.write("\n".join(eval_data))
 
@@ -116,8 +116,7 @@ def query_level_next_prediction(model_path, eval_file, top_k=5, n=3, sample_size
         queries = [line.strip() for line in f if line.strip()]
 
     if sample_size is not None and sample_size < len(queries):
-        queries = queries[:sample_size]
-        # queries = random.sample(queries, sample_size)
+        queries = random.sample(queries, sample_size)
 
 
     print(f" Evaluating {len(queries)} queries with {n}-gram model...")
